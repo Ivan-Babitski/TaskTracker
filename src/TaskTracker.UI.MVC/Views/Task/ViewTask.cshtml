@@ -1,0 +1,193 @@
+﻿@model TaskViewModel;
+
+<link href="~/css/task.css" rel="stylesheet" />
+
+<div class="task">
+    <h3>Task</h3>
+</div>
+<div class="task-container">
+    <div class="container task-page-view">
+        <h6>Name:</h6>
+    </div>
+    <div class="container task-page-view">
+        @Model.Name
+    </div>
+    <div class="container task-page-view">
+        <h6>Priority:</h6>
+    </div>
+    <div class="container task-page-view">
+        @Model.Priority
+    </div>
+    @if (Model.CloseDate != null)
+    {
+        <div class="container task-page-view">
+            <h6>Close Date:</h6>
+        </div>
+        <div class="container task-page-view">
+            @Model.CloseDate.Value.ToString("yyyy.MM.dd")
+        </div>
+    }
+    @if (Model.ReOpenDate != null)
+    {
+        <div class="container task-page-view">
+            <h6>Reopen Date:</h6>
+        </div>
+        <div class="container task-page-view">
+            @Model.ReOpenDate?.ToString("yyyy.MM.dd")
+        </div>
+    }
+    <div class="container task-page-view">
+        <h6>Create Date:</h6>
+    </div>
+    <div class="container task-page-view">
+        @Model?.CreateDate.ToString("yyyy.MM.dd")
+    </div>
+    <div class="container task-page-view">
+        <span>Description:</span>
+    </div>
+    <div class="container task-page-view">
+        @Model?.Description
+    </div>
+    @if (Model.DueDate != null)
+    {
+        <div class="container task-page-view">
+            <h6>Due Date:</h6>
+        </div>
+        <div class="container task-page-view">
+            @Model.DueDate?.ToString("yyyy.MM.dd")
+        </div>
+    }
+    @if (Model.Tags != null)
+    {
+        <div class="container task-page-view">
+            <h6>Tags:</h6>
+        </div>
+        <div class="container task-page-view">
+            @foreach (var item in Model.Tags)
+            {
+                <small>@item.Name, </small>
+            }
+        </div>
+        }
+
+        @if (Model.Participants != null)
+        {
+            <div class="container task-page-view">
+                <h6>Members:</h6>
+            </div>
+            <div class="container task-page-view">
+                @foreach (var item in @Model.Participants)
+                {
+                    @item.Name 
+                    @if (Model.IsOwner)
+                    {
+                        <form asp-action="RemoveExecutor" asp-controller="Task">
+                            <input hidden asp-for="NewExecutiorId" value="@User.Claims.Where(t => t.Type == "UserId").FirstOrDefault()" />
+                            <input hidden asp-for="Id" value="@Model.Id" />
+                            <input type="submit" value="Remove" class="btn-link btn-sm" />
+                        </form>
+                    }
+                }
+            </div>
+         }
+
+    </div>
+<div class="button-group">
+    <div>
+        <form action="AppointExecutor" method="post">
+            <select asp-for="Friends" asp-items="@Model.Friends">
+                <option disabled selected value="">--- SELECT ---</option>
+            </select>
+            <input type="submit" value="Appoint" class="btn btn-primary" />
+        </form>
+    </div>
+
+    @if (Model.CloseDate == null && !Model.IsJoined)
+    {
+        <div>
+            <form asp-action="AppointExecutor" asp-controller="Task">
+                <input hidden asp-for="NewExecutiorId" value="@User.Claims.Where(t => t.Type == "UserId").FirstOrDefault()" />
+                <input hidden asp-for="Id" value="@Model.Id" />
+                <input value="Join" type="submit" class="btn btn-primary" />
+            </form>
+        </div>
+    }
+    @if (Model.CloseDate == null && Model.IsJoined)
+    {
+        <div>
+            <form asp-action="RemoveExecutor" asp-controller="Task">
+                <input hidden asp-for="NewExecutiorId" value="@User.Claims.Where(t => t.Type == "UserId").FirstOrDefault()" />
+                <input hidden asp-for="Id" value="@Model.Id" />
+                <input type="submit" value="Leave" class="btn btn-primary" />
+            </form>
+        </div>
+    }
+    @if (Model.CloseDate == null && Model.IsOwner)
+    {
+        <div>
+            <form action="/task/@Model.Id/close" method="post">
+                <input asp-for="CloseDate" hidden>
+                <input type="submit" value="Close Task" class="btn btn-warning" />
+            </form>
+        </div>
+    }
+    @if (Model.IsOwner)
+    {
+        <div>
+            <form action="/task/@Model.Id/delete" method="post">
+                <input asp-for="Id" hidden>
+                <input type="submit" value="Delete Task" class="btn btn-danger" />
+            </form>
+        </div>
+    }
+
+
+    @if (Model.CloseDate != null && Model.IsOwner)
+    {
+        <div>
+            <form action="/" method="post">
+                <input asp-for="ReOpenDate" value="@Model.ReOpenDate = @DateTime.Now" hidden>
+                <input type="submit" value="Close Task" class="btn btn-info" />
+            </form>
+        </div>
+    }
+</div>
+
+
+@if (Model.IsOwner)
+{
+    <table class="table table-bordered">
+        <tr>
+            <th class="col-md-4">
+                @Html.DisplayNameFor(model => model.Files)
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Files)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FileName)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Downlaod", "GetFile", "File", new { id = item.Id })
+
+                </td>
+            </tr>
+        }
+    </table>
+    <form enctype="multipart/form-data" method="post">
+        <div class="button-group">
+            <div>
+                <input asp-for="Id" hidden value="@Model.Id" type="number">
+                <input asp-for="File" type="file" class="btn btn-light">
+                <span asp-validation-for="File"></span>
+            </div>
+            <div>
+                <input asp-action="SendFile" asp-controller="File" type="submit" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+}
+

@@ -1,0 +1,29 @@
+﻿body {
+    background-color: #F1F7FD;
+}
+
+.task-container {
+    display: grid;
+    grid-template-columns: 0.5fr 3fr;
+    grid-gap: 0.5em;
+}
+
+div.task {
+    text-align: center;
+}
+
+.container.task-page-view {
+    display: grid;
+    grid-template-columns: 1fr;
+    background-color: #EFEFF0;
+    text-align: start;
+    grid-column-gap: 0.5em;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.button-group {
+    display: grid;
+    grid-template-columns:repeat(5, 2fr);
+    grid-gap:2em;
+    align-self:center;
+    margin-top:1em;
+}

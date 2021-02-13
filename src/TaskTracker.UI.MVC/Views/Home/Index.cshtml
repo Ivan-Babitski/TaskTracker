@@ -1,0 +1,8 @@
+﻿@{
+    Layout = null;
+}
+<div class="text-center">
+    <h3>Home page foe tack tracker application. Access for everyone.</h3>
+    <input type="button" value="Sing In" onclick="@("window.location.href='" + @Url.Action("UserPage", "Task") + "'");" /> <br />
+    <input type="button" value="Sing Up" onclick="location.href = 'https://localhost:6004/account/registration';" /> <br />
+</div>

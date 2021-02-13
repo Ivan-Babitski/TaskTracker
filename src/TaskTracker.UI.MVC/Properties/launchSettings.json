@@ -1,0 +1,16 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:5001",
+      "sslPort": 44307
+    }
+  },
+  "profiles": {
+    "TaskTracker.UI.MVC": {
+      "commandName": "Project",
+      "launchBrowser": true
+    }
+  }
+}

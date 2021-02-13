@@ -1,0 +1,128 @@
+﻿@model IEnumerable<TaskViewModel>
+@{ var dueDate = new FilterDueDate();}
+<link href="~/css/room.css" rel="stylesheet" />
+<script src="~/lib/jquery/jquery.min.js"></script>
+
+<div class="page-container">
+    <div class="container page-view">
+        <div><h3>Tasks</h3></div>
+        <div class="form-inline-block">
+            <ul class="nav nav-tabs" role="tablist" style="text-align:center">
+                <li role="presentation" class="active" style="padding-right: 1em;"><a href="#all" aria-controls="all" role="tab" data-toggle="tab" aria-expanded="true">Tasks</a></li>
+                <li role="presentation" class="" style="padding-right: 1em;"><a href="#nearest" aria-controls="nearest" role="tab" data-toggle="tab" aria-expanded="false">Nearest task</a></li>
+                <li role="presentation" class=""><a href="#week" aria-controls="week" role="tab" data-toggle="tab" aria-expanded="false">Tasks for the week</a></li>
+            </ul>           
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="all">
+                    <div>
+                        <div class="form-inline-block">
+                            <div class="row">
+                                <table class="table table-striped table-hover table-bordered results">
+                                    <thead>
+                                        <tr>
+                                            <th hidden>id</th>
+                                            <th class="col">Name</th>
+                                            <th class="col">Priority</th>
+                                            <th class="col">DueDate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tab-one">
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <th scope="row" hidden>@item.Id</th>
+                                                <td><a class="link" href="/Task/@item.Id">@item.Name</a></td>
+                                                <td>@item.Priority</td>
+                                                <td>@item.DueDate?.ToString("yyyy.MM.dd")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="nearest">
+                    <div>
+                        <div class="form-inline-block">
+                            <div class="row">
+                                <table class="table table-striped table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th hidden>id</th>
+                                            <th class="col">Name</th>
+                                            <th class="col">Priority</th>
+                                            <th class="col">DueDate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tab-one">
+                                        @foreach (var item in Model)
+                                        {
+                                            @if (dueDate.CheckDueDate((DateTime)item.DueDate, 2))
+                                            {
+                                                <tr>
+                                                    <th scope="row" hidden>@item.Id</th>
+                                                    <td><a class="link" href="/Task/@item.Id">@item.Name</a></td>
+                                                    <td>@item.Priority</td>
+                                                    <td>@item.DueDate?.ToString("yyyy.MM.dd")</td>
+                                                </tr>
+}
+                                        }
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="week">
+                        <div>
+                            <div class="form-inline-block">
+                                <div class="row">
+                                    <table class="table table-striped table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th hidden>id</th>
+                                                <th class="col">Name</th>
+                                                <th class="col">Priority</th>
+                                                <th class="col">DueDate</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tab-one">
+                                            @foreach (var item in Model)
+                                            {
+                                                @if (dueDate.CheckDueDate((DateTime)item.DueDate, 7))
+                                                {
+                                                    <tr>
+                                                        <th scope="row" hidden>@item.Id</th>
+                                                        <td><a class="link" href="/Task/@item.Id">@item.Name</a></td>
+                                                        <td>@item.Priority</td>
+                                                        <td>@item.DueDate?.ToString("yyyy.MM.dd")</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container page-view">
+                <div><h3>Search</h3></div>
+                <div class="form-inline-block">
+                    <div class="form-group ">
+                        <div class="img-name">
+                            <img src="~/images/search.svg" />
+                            <label class="control-label">Search</label>
+                        </div>
+                        <div class="form-group ">
+                            <input type="text" class="searchKey form-control" placeholder="Search task..">
+                            <span class="searchCount" style="color:skyblue"></span>
+                        </div>
+                    </div>
+                </div>
+                <script src="~/js/room-tasks.js"></script>
+            </div>
+        </div>

@@ -1,0 +1,82 @@
+﻿@model TaskTracker.UI.MVC.Models.TaskCreateViewModel
+
+<head>
+    <link href="~/css/create-task.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="wrapper">
+        <div style="text-align: center;">
+            <h2>Create Task</h2>
+        </div>
+        <div>
+            <form action="CreateTask" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-inline-block">
+                    <div class="img-name">
+                        <img src="~/images/pencil-square.svg" />
+                        <label asp-for="Name" class="control-label"></label>
+                    </div>
+                    <div>
+                        <input asp-for="Name" class="form-control" style="margin:2px;" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-inline-block">
+                    <div class="img-name">
+                        <img src="~/images/pencil-square.svg" />
+                        <label asp-for="Description" class="control-label"></label>
+                    </div>
+                    <div>
+                        <input asp-for="Description" class="form-control" style="margin:2px;" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-inline-block">
+                    <div class="img-name">
+                        <img src="~/images/calendar-date.svg" />
+                        <label asp-for="DueDate" class="control-label"></label>
+                    </div>
+                    <div>
+                        <input asp-for="DueDate" class="form-control" style="margin:2px;" />
+                        <span asp-validation-for="DueDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-inline-block">
+                    <div class="img-name">
+                        <img src="~/images/lightning.svg" />
+                        <label asp-for="Priorities" class="control-label"></label>
+                    </div>
+                    <div>
+                        <select asp-for="PriorityId" asp-items="Model.Priorities"></select>
+                    </div>
+                </div>
+                <div class="form-inline-block">
+                    <div class="img-name">
+                        <img src="~/images/lightning.svg" />
+                        <label asp-for="Tasks" class="control-label"></label>
+                    </div>
+                    <div>
+                        <select asp-for="ParentTaskId" asp-items="Model.Tasks">
+                            <option disabled selected value="">--- SELECT ---</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-inline-block">
+                    <div class="img-name">
+                        <img src="~/images/tag.svg" />
+                        <label asp-for="Tags" class="control-label"></label>
+                    </div>
+                    <div>
+                        <input asp-for="Tags" class="form-control" style="margin:2px;" />
+                        <span asp-validation-for="Tags" class="text-danger"></span>
+                    </div>
+                </div>                
+                <div class="button-group">
+                    <button type="reset" class="btn btn-light butn1">Reset</button>
+                    <input type="submit" value="Create" class="btn btn-primary butn2" />
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
